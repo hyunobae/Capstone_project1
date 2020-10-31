@@ -7,7 +7,7 @@ detector = dlib.get_frontal_face_detector()
 predictor = dlib.shape_predictor('shape_predictor_68_face_landmarks.dat')
 
 # load video
-cap = cv2.VideoCapture('IU_demo.mp4')
+cap = cv2.VideoCapture(0)
 # load overlay image
 # overlay = cv2.imread('ryan_transparent.png',cv2.IMREAD_UNCHANGED)
 
