@@ -1,0 +1,11 @@
+Python 3.x
+opencv-python
+tensorflow
+numpy
+pandas
+matplotlib
+scipy
+seaborn
+mtcnn
+
+demo_upgraded.py 돌려야함
