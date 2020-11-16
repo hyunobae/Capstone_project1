@@ -9,7 +9,9 @@ from person_db import Face
 from person_db import PersonDB
 import face_recognition
 import numpy as np
+#import datetime
 from datetime import datetime
+#import datetime
 import cv2
 
 
@@ -76,7 +78,8 @@ class FaceClassifier():
         for i, box in enumerate(boxes):
             face_image = self.get_face_image(frame, box)
             #face = Face(str_ms + str(i) + ".png", face_image, encodings[i])
-            face = Face(frame_name + ".png",face_image,encodings[i])
+            #face = Face(frame_name + ".png",face_image,encodings[i])
+            face = Face(frame_name,face_image,encodings[i])
             face.location = box
             faces.append(face)
         return faces
@@ -200,10 +203,10 @@ if __name__ == '__main__':
     for q in range(2):  # range(~~~) -> client 수
     #for q in range(num_of_Raspberry):
         if src_file == "0":
-            total_img = './total'+str(q)
+            total_img = './client'+str(q)
             frame_img = os.listdir(total_img)
             frame_img.sort()
-            src_file = './total'+str(q) + '/' + frame_img[0]
+            src_file = './client'+str(q) + '/' + frame_img[0]
 
         src = cv2.VideoCapture(src_file)
 
@@ -261,7 +264,7 @@ if __name__ == '__main__':
         while running:
             if len(frame_img) == frame_cnt:
                 break
-            src_file = './total' +str(q)+'/'+ frame_img[frame_cnt]
+            src_file = './client' +str(q)+'/'+ frame_img[frame_cnt]
             src = cv2.VideoCapture(src_file)
 
             ret, frame = src.read()
@@ -355,6 +358,7 @@ if __name__ == '__main__':
             # path_dir = './result/person_01'
             path_dir = './result' +str(q)+'/'+ dir_person[j]
             file_list = os.listdir(path_dir)
+            #print(file_list)
 
             file_list.sort()
 
@@ -364,21 +368,47 @@ if __name__ == '__main__':
             print(dir_person[j])
             f.write(dir_person[j]+"\n")
             for i in range(len(file_list)):
-                file_list[i] = file_list[i][9:15]
+                #file_list[i] = file_list[i][9:15]
+                #print(file_list[i])
+                ctime = os.path.getctime("./client"+str(q)+"/"+file_list[i])
+                hi = str(datetime.fromtimestamp(ctime))
+                hms = hi[11:19]
+                #ctime = os.path.getctime('./client0/20201031_200941.673-0.png')
+                #hi = datetime.datetime.fromtimestamp(ctime)
+                #hi = str(datetime.datetime.fromtimestamp(ctime))
+
+
+
+
+
+                #print(str(hi)[11:19])
+                #ctime = os.path.getctime(path or filename)
                 if i == 0:
-                    start_time = (int(file_list[i][0:2]) * 3600) + (int(file_list[i][2:4]) * 60) + int(file_list[i][4:6])
+                    #start_time = (int(file_list[i][0:2]) * 3600) + (int(file_list[i][2:4]) * 60) + int(file_list[i][4:6])
+                    start_time = (int(hms[0:2]) * 3600) + (int(hms[3:5]) * 60) + int(hms[6:8])
                     flag += 1
                     continue
                 if flag == 0:
-                    start_time = (int(file_list[i - 1][0:2]) * 3600) + (int(file_list[i - 1][2:4]) * 60) + int(
-                        file_list[i - 1][4:6])
+                    #btime = os.path.getctime(file_list[i-1])
+                    btime = os.path.getctime("./client" + str(q) + "/" + file_list[i-1])
+                    bhi = str(datetime.fromtimestamp(btime))
+                    bhms = bhi[11:19]
+
+                    #start_time = (int(file_list[i - 1][0:2]) * 3600) + (int(file_list[i - 1][2:4]) * 60) + int(file_list[i - 1][4:6])
+                    start_time = (int(bhms[0:2]) * 3600) + (int(bhms[3:5]) * 60) + int(bhms[6:8])
+
                     flag = 1
                     if i != len(file_list) - 1:
                         continue
 
-                now_time = (int(file_list[i][0:2]) * 3600) + (int(file_list[i][2:4]) * 60) + int(file_list[i][4:6])
-                before_time = (int(file_list[i - 1][0:2]) * 3600) + (int(file_list[i - 1][2:4]) * 60) + int(
-                    file_list[i - 1][4:6])
+                #now_time = (int(file_list[i][0:2]) * 3600) + (int(file_list[i][2:4]) * 60) + int(file_list[i][4:6])
+                now_time = (int(hms[0:2]) * 3600) + (int(hms[3:5]) * 60) + int(hms[6:8])
+                #before_time = (int(file_list[i - 1][0:2]) * 3600) + (int(file_list[i - 1][2:4]) * 60) + int(file_list[i - 1][4:6])
+                btime = os.path.getctime("./client" + str(q) + "/" + file_list[i - 1])
+                bhi = str(datetime.fromtimestamp(btime))
+                bhms = bhi[11:19]
+
+                before_time = (int(bhms[0:2]) * 3600) + (int(bhms[3:5]) * 60) + int(bhms[6:8])
 
                 if i == len(file_list) - 1:
                     print(now_time - start_time)
